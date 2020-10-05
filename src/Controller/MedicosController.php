@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class MedicosController
 {
     /**
-     * @Route("/medicos")
+     * @Route("/medicos", methods={"POST"})
      */
     public function novo(Request $request): Response
     {
