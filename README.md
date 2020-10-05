@@ -16,3 +16,7 @@ No . env
 DATABASE_URL=sqlite:///%kernel.project_dir%/var/data.db
 
 $ bin/console doctrine:database:create
+
+$ bin/console doctrine:migrations:diff
+
+$ bin/console doctrine:migrations:migrate
