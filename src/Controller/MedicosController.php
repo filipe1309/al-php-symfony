@@ -54,14 +54,41 @@ class MedicosController extends AbstractController
     /**
      * @Route("/medicos/{id}", methods={"GET"})
      */
-    public function buscarum(Request $request): Response
+    public function buscarUm(int $id): Response
     {
-        $id = $request->get('id');
         $repositorioDeMedicos = $this->getDoctrine()->getRepository(Medico::class);
         $medico = $repositorioDeMedicos->find($id);
 
-        $codigoRetorno = is_null($medico) ? Response::HTTP_NO_CONTENT : Response::HTTP_OK;
+         $codigoRetorno = is_null($medico) ? Response::HTTP_NO_CONTENT : Response::HTTP_OK;
 
         return new JsonResponse($medico, $codigoRetorno);
+    }
+
+    /**
+     * @Route("/medicos/{id}", methods={"PUT"})
+     */
+    public function atualiza(int $id, Request $request): Response
+    {
+        $corpoRequisiscao = $request->getContent();
+        $dadoEmJson = json_decode($corpoRequisiscao);
+
+        $medicoEnviado = new Medico();
+        $medicoEnviado->crm = $dadoEmJson->crm;
+        $medicoEnviado->nome = $dadoEmJson->nome;
+
+        $repositorioDeMedicos = $this->getDoctrine()->getRepository(Medico::class);
+        $medicoExistente = $repositorioDeMedicos->find($id);
+
+        if (is_null($medicoExistente)) {
+            return new Response(null, Response::HTTP_NOT_FOUND);
+        }
+
+        $medicoExistente->crm = $medicoEnviado->crm;
+        $medicoExistente->nome = $medicoEnviado->nome;
+
+        // Envia alteracoes para o banco
+        $this->entityManager->flush();
+
+        return new JsonResponse($medicoExistente);
     }
 }
