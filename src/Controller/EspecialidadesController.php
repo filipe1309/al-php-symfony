@@ -13,26 +13,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class EspecialidadesController extends BaseController
 {
-    private $factory;
-
     public function __construct(EntityManagerInterface $entityManager, EspecialidadeRepository $repository, EspecialidadeFactory $factory)
     {
-        parent::__construct($entityManager, $repository);
-        $this->factory = $factory;
-    }
-
-    /**
-     * @Route("/especialidades", methods={"POST"})
-     */
-    public function nova(Request $request): Response
-    {
-        $dadosRequest = $request->getContent();
-        $especialidade = $this->factory->criarEntidade($dadosRequest);
-
-        $this->entityManager->persist($especialidade);
-        $this->entityManager->flush();
-
-        return new JsonResponse($especialidade);
+        parent::__construct($entityManager, $repository, $factory);
     }
 
     /**

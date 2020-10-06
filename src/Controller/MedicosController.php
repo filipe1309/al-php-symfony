@@ -13,29 +13,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class MedicosController extends BaseController
 {
-    private $medicoFactory;
-
-    public function __construct(EntityManagerInterface $entityManager, MedicoFactory $medicoFactory, MedicoRepository $repository)
+    public function __construct(EntityManagerInterface $entityManager, MedicoFactory $factory, MedicoRepository $repository)
     {
-        parent::__construct($entityManager, $repository);
-        $this->medicoFactory = $medicoFactory;
-    }
-
-    /**
-     * @Route("/medicos", methods={"POST"})
-     */
-    public function novo(Request $request): Response
-    {
-        $corpoRequisiscao = $request->getContent();
-        $medico = $this->medicoFactory->criarMedico($corpoRequisiscao);
-
-        // Entity observar esta entidade
-        $this->entityManager->persist($medico);
-
-        // Envia alteracoes para o banco
-        $this->entityManager->flush();
-
-        return new JsonResponse($medico);
+        parent::__construct($entityManager, $repository, $factory);
     }
 
     /**
@@ -45,7 +25,7 @@ class MedicosController extends BaseController
     {
         $corpoRequisiscao = $request->getContent();
 
-        $medicoEnviado = $this->medicoFactory->criarMedico($corpoRequisiscao);
+        $medicoEnviado = $this->factory->criarEntidade($corpoRequisiscao);
 
         $medicoExistente = $this->buscaMedico($id);
 
