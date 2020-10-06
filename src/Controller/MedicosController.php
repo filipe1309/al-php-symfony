@@ -103,4 +103,15 @@ class MedicosController extends AbstractController
 
         return $repositorioDeMedicos->find($id);
     }
+
+    /**
+     * @Route("/especialidades/{especialidadeId}/medicos", methods={"GET"})
+     */
+    public function buscaPorespecialidade(int $especialidadeId): Response
+    {
+        $repositorioDeMedicos = $this->getDoctrine()->getRepository(Medico::class);
+        $medicos = $repositorioDeMedicos->findBy(['especialidade' => $especialidadeId]);
+        
+        return new JsonResponse($medicos);
+    }
 }
