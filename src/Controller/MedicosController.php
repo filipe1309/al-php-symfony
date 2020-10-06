@@ -6,7 +6,6 @@ use App\Entity\Medico;
 use App\Helper\MedicoFactory;
 use App\Repository\MedicoRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -19,27 +18,15 @@ class MedicosController extends BaseController
     }
 
     /**
-     * @Route("/medicos/{id}", methods={"PUT"})
+     * @param Medico $entidadeExistente
+     * @param Medico $entidadeEnviada
      */
-    public function atualiza(int $id, Request $request): Response
+    public function atualizarEntidadeExistente($entidadeExistente, $entidadeEnviada)
     {
-        $corpoRequisiscao = $request->getContent();
-
-        $medicoEnviado = $this->factory->criarEntidade($corpoRequisiscao);
-
-        $medicoExistente = $this->buscaMedico($id);
-
-        if (is_null($medicoExistente)) {
-            return new Response(null, Response::HTTP_NOT_FOUND);
-        }
-
-        $medicoExistente->setCrm($medicoEnviado->getCrm());
-        $medicoExistente->setNome($medicoEnviado->getNome());
-
-        // Envia alteracoes para o banco
-        $this->entityManager->flush();
-
-        return new JsonResponse($medicoExistente);
+        $entidadeExistente
+            ->setCrm($entidadeEnviada->getCrm())
+            ->setNome($entidadeEnviada->getNome())
+            ->setEspecialidade($entidadeEnviada->getEspecialidade());
     }
 
     public function buscaMedico(int $id)

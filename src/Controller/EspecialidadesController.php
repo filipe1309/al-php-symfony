@@ -6,10 +6,6 @@ use App\Entity\Especialidade;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Helper\EspecialidadeFactory;
 use App\Repository\EspecialidadeRepository;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\JsonResponse;
 
 class EspecialidadesController extends BaseController
 {
@@ -19,18 +15,11 @@ class EspecialidadesController extends BaseController
     }
 
     /**
-     * @Route("/especialidades/{id}", methods={"PUT"})
+     * @param Especialidade $entidadeExistente
+     * @param Especialidade $entidadeEnviada
      */
-    public function atualiza($id, Request $request): Response
+    public function atualizarEntidadeExistente($entidadeExistente, $entidadeEnviada)
     {
-        $dadosRequest = $request->getContent();
-        $dadosEmJson = json_decode($dadosRequest);
-
-        $especialidade = $this->repository->find($id);
-        $especialidade->setDescricao($dadosEmJson->descricao);
-
-        $this->entityManager->flush();
-
-        return new JsonResponse($especialidade);
+        $entidadeExistente->setDescricao($entidadeEnviada->getDescricao());
     }
 }

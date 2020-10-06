@@ -63,4 +63,26 @@ abstract class BaseController extends AbstractController
 
         return new Response(null, Response::HTTP_NO_CONTENT);
     }
+
+    public function atualiza(int $id, Request $request): Response
+    {
+        $corpoRequisiscao = $request->getContent();
+
+        $entidadeEnviada = $this->factory->criarEntidade($corpoRequisiscao);
+
+        $entidadeExistente = $this->repository->find($id);
+
+        if (is_null($entidadeExistente)) {
+            return new Response(null, Response::HTTP_NOT_FOUND);
+        }
+
+        $this->atualizarEntidadeExistente($entidadeExistente, $entidadeEnviada);
+
+        // Envia alteracoes para o banco
+        $this->entityManager->flush();
+
+        return new JsonResponse($entidadeExistente);
+    }
+
+    abstract public function atualizarEntidadeExistente($entidadeExistente, $entidadeEnviada);
 }
