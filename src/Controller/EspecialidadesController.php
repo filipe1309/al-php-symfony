@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Especialidade;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Helper\EspecialidadeFactory;
 use App\Repository\EspecialidadeRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,9 +13,12 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class EspecialidadesController extends BaseController
 {
-    public function __construct(EntityManagerInterface $entityManager, EspecialidadeRepository $repository)
+    private $factory;
+
+    public function __construct(EntityManagerInterface $entityManager, EspecialidadeRepository $repository, EspecialidadeFactory $factory)
     {
         parent::__construct($entityManager, $repository);
+        $this->factory = $factory;
     }
 
     /**
@@ -23,10 +27,7 @@ class EspecialidadesController extends BaseController
     public function nova(Request $request): Response
     {
         $dadosRequest = $request->getContent();
-        $dadosEmJson = json_decode($dadosRequest);
-
-        $especialidade = new Especialidade();
-        $especialidade->setDescricao($dadosEmJson->descricao);
+        $especialidade = $this->factory->criarEntidade($dadosRequest);
 
         $this->entityManager->persist($especialidade);
         $this->entityManager->flush();
