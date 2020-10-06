@@ -43,9 +43,10 @@ abstract class BaseController extends AbstractController
         return new JsonResponse($entidade, Response::HTTP_CREATED);
     }
 
-    public function buscarTodos(): Response
+    public function buscarTodos(Request $request): Response
     {
-        $entityList = $this->repository->findAll();
+        $informcaoesDeOrdenacao = $request->query->get('sort');
+        $entityList = $this->repository->findBy([], $informcaoesDeOrdenacao);
 
         return new JsonResponse($entityList);
     }
