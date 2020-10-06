@@ -4,11 +4,12 @@ namespace App\Entity;
 
 use App\Repository\EspecialidadeRepository;
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
 
 /**
  * @ORM\Entity(repositoryClass=EspecialidadeRepository::class)
  */
-class Especialidade
+class Especialidade implements JsonSerializable
 {
     /**
      * @ORM\Id
@@ -37,5 +38,13 @@ class Especialidade
         $this->descricao = $descricao;
 
         return $this;
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->getId(),
+            'descricao' => $this->getDescricao()
+        ];
     }
 }
