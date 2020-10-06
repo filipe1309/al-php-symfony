@@ -4,9 +4,10 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use JsonSerializable;
+use App\Repository\MedicoRepository;
 
 /**
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass=MedicoRepository::class)
  */
 class Medico implements JsonSerializable
 {

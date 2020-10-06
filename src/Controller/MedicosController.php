@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Medico;
 use App\Helper\MedicoFactory;
+use App\Repository\MedicoRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,11 +16,13 @@ class MedicosController extends AbstractController
 {
     private $entityManager;
     private $medicoFactory;
+    private $medicoRepository;
 
-    public function __construct(EntityManagerInterface $entityManager, MedicoFactory $medicoFactory)
+    public function __construct(EntityManagerInterface $entityManager, MedicoFactory $medicoFactory, MedicoRepository $medicoRepository)
     {
         $this->entityManager = $entityManager;
         $this->medicoFactory = $medicoFactory;
+        $this->medicoRepository = $medicoRepository;
     }
 
     /**
@@ -44,8 +47,7 @@ class MedicosController extends AbstractController
      */
     public function buscarTodos(): Response
     {
-        $repositorioDeMedicos = $this->getDoctrine()->getRepository(Medico::class);
-        $medicoList = $repositorioDeMedicos->findAll();
+        $medicoList = $this->medicoRepository->findAll();
 
         return new JsonResponse($medicoList);
     }
@@ -99,9 +101,7 @@ class MedicosController extends AbstractController
 
     public function buscaMedico(int $id)
     {
-        $repositorioDeMedicos = $this->getDoctrine()->getRepository(Medico::class);
-
-        return $repositorioDeMedicos->find($id);
+        return $this->medicoRepository->find($id);
     }
 
     /**
@@ -109,8 +109,7 @@ class MedicosController extends AbstractController
      */
     public function buscaPorespecialidade(int $especialidadeId): Response
     {
-        $repositorioDeMedicos = $this->getDoctrine()->getRepository(Medico::class);
-        $medicos = $repositorioDeMedicos->findBy(['especialidade' => $especialidadeId]);
+        $medicos = $this->medicoRepository->findBy(['especialidade' => $especialidadeId]);
         
         return new JsonResponse($medicos);
     }
