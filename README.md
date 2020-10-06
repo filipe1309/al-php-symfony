@@ -52,3 +52,5 @@ bin/console doctrine:database:drop --force
 bin/console doctrine:database:create
 
 bin/console make:controller
+
+git tag -a v2.0 -m "Symfony 2"
