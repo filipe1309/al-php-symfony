@@ -5,7 +5,7 @@ namespace App\Helper;
 use App\Entity\Especialidade;
 use App\Repository\EspecialidadeRepository;
 
-class EspecialidadeFactory
+class EspecialidadeFactory implements EntidadeFactory
 {
     private $especialidadeRepository;
 
