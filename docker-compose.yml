@@ -1,18 +1,22 @@
-php:
-    build: .
-    ports:
-        - "80:80"
-        - "443:443"
-    volumes: 
-        - .:/var/www/html
-    links: 
-        - db
+version: "3.8"
+services:
+    php:
+        build: .
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes: 
+            - .:/var/www/html
+        depends_on:
+            - db
+        links: 
+            - db
 
-db:
-    image: mysql:5.7
-    container_name: mysqlcontainer
-    volumes:
-        - /var/lib/mysql
-    environment: 
-        - MYSQL_ROOT_PASSWORD=myrootpass
-        - MYSQL_DATABASE=consultorio
+    db:
+        image: mysql:5.7
+        container_name: mysqlcontainer
+        volumes:
+            - /var/lib/mysql
+        environment: 
+            - MYSQL_ROOT_PASSWORD=myrootpass
+            - MYSQL_DATABASE=consultorio
