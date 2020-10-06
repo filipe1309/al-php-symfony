@@ -76,8 +76,8 @@ class MedicosController extends AbstractController
             return new Response(null, Response::HTTP_NOT_FOUND);
         }
 
-        $medicoExistente->crm = $medicoEnviado->crm;
-        $medicoExistente->nome = $medicoEnviado->nome;
+        $medicoExistente->setCrm($medicoEnviado->getCrm());
+        $medicoExistente->setNome($medicoEnviado->getNome());
 
         // Envia alteracoes para o banco
         $this->entityManager->flush();
