@@ -9,15 +9,15 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class EspecialidadesController extends AbstractController
+class EspecialidadesController extends BaseController
 {
     private $entityManager;
     private $repository;
 
     public function __construct(EntityManagerInterface $entityManager, EspecialidadeRepository $repository)
     {
+        parent::__construct($repository);
         $this->entityManager = $entityManager;
         $this->repository = $repository;
     }
@@ -37,16 +37,6 @@ class EspecialidadesController extends AbstractController
         $this->entityManager->flush();
 
         return new JsonResponse($especialidade);
-    }
-
-    /**
-     * @Route("/especialidades", methods={"GET"})
-     */
-    public function buscarTodas(): Response
-    {
-        $especialidadeList = $this->repository->findAll();
-
-        return new JsonResponse($especialidadeList);
     }
 
     /**

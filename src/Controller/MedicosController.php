@@ -10,9 +10,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class MedicosController extends AbstractController
+class MedicosController extends BaseController
 {
     private $entityManager;
     private $medicoFactory;
@@ -20,6 +19,7 @@ class MedicosController extends AbstractController
 
     public function __construct(EntityManagerInterface $entityManager, MedicoFactory $medicoFactory, MedicoRepository $medicoRepository)
     {
+        parent::__construct($medicoRepository);
         $this->entityManager = $entityManager;
         $this->medicoFactory = $medicoFactory;
         $this->medicoRepository = $medicoRepository;
@@ -40,16 +40,6 @@ class MedicosController extends AbstractController
         $this->entityManager->flush();
 
         return new JsonResponse($medico);
-    }
-
-    /**
-     * @Route("/medicos", methods={"GET"})
-     */
-    public function buscarTodos(): Response
-    {
-        $medicoList = $this->medicoRepository->findAll();
-
-        return new JsonResponse($medicoList);
     }
 
     /**
