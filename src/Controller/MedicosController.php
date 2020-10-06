@@ -13,16 +13,12 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class MedicosController extends BaseController
 {
-    private $entityManager;
     private $medicoFactory;
-    private $medicoRepository;
 
-    public function __construct(EntityManagerInterface $entityManager, MedicoFactory $medicoFactory, MedicoRepository $medicoRepository)
+    public function __construct(EntityManagerInterface $entityManager, MedicoFactory $medicoFactory, MedicoRepository $repository)
     {
-        parent::__construct($medicoRepository);
-        $this->entityManager = $entityManager;
+        parent::__construct($entityManager, $repository);
         $this->medicoFactory = $medicoFactory;
-        $this->medicoRepository = $medicoRepository;
     }
 
     /**
@@ -40,17 +36,6 @@ class MedicosController extends BaseController
         $this->entityManager->flush();
 
         return new JsonResponse($medico);
-    }
-
-    /**
-     * @Route("/medicos/{id}", methods={"GET"})
-     */
-    public function buscarUm(int $id): Response
-    {
-        $medico = $this->buscaMedico($id);
-        $codigoRetorno = is_null($medico) ? Response::HTTP_NO_CONTENT : Response::HTTP_OK;
-
-        return new JsonResponse($medico, $codigoRetorno);
     }
 
     /**
@@ -77,21 +62,9 @@ class MedicosController extends BaseController
         return new JsonResponse($medicoExistente);
     }
 
-    /**
-     * @Route("/medicos/{id}", methods={"DELETE"})
-     */
-    public function remove(int $id): Response
-    {
-        $medico = $this->buscaMedico($id);
-        $this->entityManager->remove($medico);
-        $this->entityManager->flush();
-
-        return new Response(null, Response::HTTP_NO_CONTENT);
-    }
-
     public function buscaMedico(int $id)
     {
-        return $this->medicoRepository->find($id);
+        return $this->repository->find($id);
     }
 
     /**
@@ -99,7 +72,7 @@ class MedicosController extends BaseController
      */
     public function buscaPorespecialidade(int $especialidadeId): Response
     {
-        $medicos = $this->medicoRepository->findBy(['especialidade' => $especialidadeId]);
+        $medicos = $this->repository->findBy(['especialidade' => $especialidadeId]);
         
         return new JsonResponse($medicos);
     }

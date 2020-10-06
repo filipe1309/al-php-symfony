@@ -12,14 +12,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class EspecialidadesController extends BaseController
 {
-    private $entityManager;
-    private $repository;
-
     public function __construct(EntityManagerInterface $entityManager, EspecialidadeRepository $repository)
     {
-        parent::__construct($repository);
-        $this->entityManager = $entityManager;
-        $this->repository = $repository;
+        parent::__construct($entityManager, $repository);
     }
 
     /**
@@ -40,16 +35,6 @@ class EspecialidadesController extends BaseController
     }
 
     /**
-     * @Route("/especialidades/{id}", methods={"GET"})
-     */
-    public function buscarUma(int $id): Response
-    {
-        $especialidade = $this->repository->find($id);
-
-        return new JsonResponse($especialidade);
-    }
-
-    /**
      * @Route("/especialidades/{id}", methods={"PUT"})
      */
     public function atualiza($id, Request $request): Response
@@ -64,17 +49,4 @@ class EspecialidadesController extends BaseController
 
         return new JsonResponse($especialidade);
     }
-
-    /**
-     * @Route("/especialidades/{id}", methods={"DELETE"})
-     */
-    public function remove($id): Response
-    {
-        $especialidade = $this->repository->find($id);
-        $this->entityManager->remove($especialidade);
-        $this->entityManager->flush();
-
-        return new Response(null, Response::HTTP_NO_CONTENT);
-    }
-      
 }
