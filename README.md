@@ -46,3 +46,9 @@ $ bin/console make:entity
 $ bin/console make:migration
 
 $ bin/console doctrine:migrations:migrate
+
+bin/console doctrine:database:drop --force
+
+bin/console doctrine:database:create
+
+bin/console make:controller
