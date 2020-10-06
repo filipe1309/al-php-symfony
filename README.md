@@ -30,4 +30,19 @@ $ bin/console doctrine:database:create
 
 $ bin/console doctrine:migrations:diff
 
-$ bin/console doctrine:migrations:execute --up 'DoctrineMigrations\Version20201006004936'
+$ bin/console --no-interaction doctrine:migrations:execute --up 'DoctrineMigrations\Version20201006004936'
+
+RUN /bin/bash -c 'php /var/www/html/bin/console --no-interaction --allow-no-migration doctrine:migrations:execute --up \'DoctrineMigrations\Version20201006004936\''
+
+        entrypoint: ["/var/www/html/bin/console", "--no-interaction", "doctrine:migrations:execute", "-vvv", "--up", 'DoctrineMigrations\Version20201006004936']
+
+
+$ composer require maker
+
+$ bin/console list make
+
+$ bin/console make:entity
+
+$ bin/console make:migration
+
+$ bin/console doctrine:migrations:migrate
