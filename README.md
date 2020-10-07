@@ -73,6 +73,7 @@ bin/console security:encode-password
 
 bin/console doctrine:fixtures:load
 
+bin/console make:controller
 
 ## Endpoints examples
 
