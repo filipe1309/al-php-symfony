@@ -54,9 +54,21 @@ abstract class BaseController extends AbstractController
     {
         $informacoesDeOrdenacao = $this->extratorDadosRequest->buscaDadosOrdenacao($request);
         $informacoesDeFiltro = $this->extratorDadosRequest->buscaDadosFiltro($request);
-        $entityList = $this->repository->findBy($informacoesDeFiltro, $informacoesDeOrdenacao);
+        [$paginalAtual, $itensPorPagina] = $this->extratorDadosRequest->buscaDadosPaginacao($request);
 
-        return new JsonResponse($entityList);
+        $entityList = $this->repository->findBy(
+            $informacoesDeFiltro,
+            $informacoesDeOrdenacao,
+            $itensPorPagina,
+            ($paginalAtual - 1)*$itensPorPagina
+        );
+
+        $httpStatus = Response::HTTP_OK;
+        if ($entityList) {
+            $httpStatus = Response::HTTP_PARTIAL_CONTENT;
+        }
+
+        return new JsonResponse($entityList, $httpStatus);
     }
 
     public function buscarUm(int $id): Response
