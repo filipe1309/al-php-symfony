@@ -70,6 +70,8 @@ BODY raw (Content-Type: application/json)
     "especialidadeId": 5
 }
 
+GET http://localhost/medicos
+
 GET http://localhost/medicos?sort[crm]=ASC&especialidade=1
 
 GET http://localhost/medicos?page=2&itensPorPagina=3
@@ -93,6 +95,8 @@ BODY raw (Content-Type: application/json)
 {
     "descricao": "Especialidade 3"
 }
+
+GET http://localhost/especialidades
 
 GET http://localhost/especialidades?sort[descricao]=DESC
 
