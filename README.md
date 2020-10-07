@@ -54,3 +54,56 @@ bin/console doctrine:database:create
 bin/console make:controller
 
 git tag -a v2.0 -m "Symfony 2"
+
+
+## Endpoints examples
+
+### Medicos
+
+GET http://localhost/ola?parametro=valor&parametro2=valor2
+
+POST http://localhost/medicos
+BODY raw (Content-Type: application/json)
+{
+    "crm": 101010,
+    "nome": "John Lennon",
+    "especialidadeId": 5
+}
+
+GET http://localhost/medicos?sort[crm]=ASC&especialidade=1
+
+GET http://localhost/medicos?page=2&itensPorPagina=3
+
+GET http://localhost/medicos/2
+
+PUT http://localhost/medicos/1
+BODY raw (Content-Type: application/json)
+{
+    "crm": 111111,
+    "nome": "Bob Dlan 1.1",
+    "especialidadeId": 1
+}
+
+DEL http://localhost/medicos/2
+
+### Especialidades
+
+POST http://localhost/especialidades
+BODY raw (Content-Type: application/json)
+{
+    "descricao": "Especialidade 3"
+}
+
+GET http://localhost/especialidades?sort[descricao]=DESC
+
+GET http://localhost/especialidades/2
+
+PUT http://localhost/especialidades/4
+BODY raw (Content-Type: application/json)
+{
+    "descricao": "Especialidade 4"
+}
+
+DEL http://localhost/especialidades/2
+
+GET http://localhost/especialidades/1/medicos
