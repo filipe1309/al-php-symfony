@@ -55,6 +55,24 @@ bin/console make:controller
 
 git tag -a v2.0 -m "Symfony 2"
 
+composer require security
+
+composer require firebase/php-jwt
+
+bin/console make:user
+
+bin/console make:migration
+
+$ bin/console doctrine:migrations:migrate
+
+composer require orm-fixtures --dev
+
+$ bin/console make:fixtures
+
+bin/console security:encode-password
+
+bin/console doctrine:fixtures:load
+
 
 ## Endpoints examples
 
