@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Helper\EntidadeFactory;
+use App\Helper\ExtratorDadosRequest;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,12 +17,18 @@ abstract class BaseController extends AbstractController
     protected $entityManager;
     protected $repository;
     protected $factory;
+    protected $extratorDadosRequest;
 
-    public function __construct(EntityManagerInterface $entityManager, ObjectRepository $repository, EntidadeFactory $factory)
-    {
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        ObjectRepository $repository,
+        EntidadeFactory $factory,
+        ExtratorDadosRequest $extratorDadosRequest
+    ) {
         $this->entityManager = $entityManager;
         $this->repository = $repository;
         $this->factory = $factory;
+        $this->extratorDadosRequest = $extratorDadosRequest;
     }
     
     public function novo(Request $request): Response
@@ -45,10 +52,9 @@ abstract class BaseController extends AbstractController
 
     public function buscarTodos(Request $request): Response
     {
-        $informcaoesDeOrdenacao = $request->query->get('sort');
-        $queryString = $request->query->all();
-        unset($queryString['sort']);
-        $entityList = $this->repository->findBy($queryString, $informcaoesDeOrdenacao);
+        $informacoesDeOrdenacao = $this->extratorDadosRequest->buscaDadosOrdenacao($request);
+        $informacoesDeFiltro = $this->extratorDadosRequest->buscaDadosFiltro($request);
+        $entityList = $this->repository->findBy($informacoesDeFiltro, $informacoesDeOrdenacao);
 
         return new JsonResponse($entityList);
     }

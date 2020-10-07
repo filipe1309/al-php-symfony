@@ -3,15 +3,20 @@
 namespace App\Controller;
 
 use App\Entity\Especialidade;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Helper\ExtratorDadosRequest;
 use App\Helper\EspecialidadeFactory;
+use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\EspecialidadeRepository;
 
 class EspecialidadesController extends BaseController
 {
-    public function __construct(EntityManagerInterface $entityManager, EspecialidadeRepository $repository, EspecialidadeFactory $factory)
-    {
-        parent::__construct($entityManager, $repository, $factory);
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        EspecialidadeRepository $repository,
+        EspecialidadeFactory $factory,
+        ExtratorDadosRequest $extratorDadosRequest
+    ) {
+        parent::__construct($entityManager, $repository, $factory, $extratorDadosRequest);
     }
 
     /**
