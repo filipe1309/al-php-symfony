@@ -65,7 +65,6 @@ abstract class BaseController extends AbstractController
         );
 
         $statusResposta = is_null($entityList) ? Response::HTTP_NO_CONTENT : Response::HTTP_OK;
-
         $fabricaResposta = new ResponseFactory(true, $entityList, $statusResposta, $paginalAtual, $itensPorPagina);
 
         return $fabricaResposta->getResponse();
@@ -92,13 +91,12 @@ abstract class BaseController extends AbstractController
     public function atualiza(int $id, Request $request): Response
     {
         $corpoRequisiscao = $request->getContent();
-
         $entidadeEnviada = $this->factory->criarEntidade($corpoRequisiscao);
-
         $entidadeExistente = $this->repository->find($id);
 
         if (is_null($entidadeExistente)) {
-            return new Response(null, Response::HTTP_NOT_FOUND);
+            $fabricaResposta = new ResponseFactory(false, 'Recurso nao encontrado', Response::HTTP_NOT_FOUND);
+            return $fabricaResposta->getResponse();
         }
 
         $this->atualizarEntidadeExistente($entidadeExistente, $entidadeEnviada);
@@ -106,7 +104,8 @@ abstract class BaseController extends AbstractController
         // Envia alteracoes para o banco
         $this->entityManager->flush();
 
-        return new JsonResponse($entidadeExistente);
+        $fabricaResposta = new ResponseFactory(true, $entidadeExistente, Response::HTTP_OK);
+        return $fabricaResposta->getResponse();
     }
 
     abstract public function atualizarEntidadeExistente($entidadeExistente, $entidadeEnviada);
