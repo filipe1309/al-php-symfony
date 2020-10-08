@@ -35,12 +35,11 @@ abstract class BaseController extends AbstractController
     public function novo(Request $request): Response
     {
         $dadosRequest = $request->getContent();
-        try {
+        // try {
             $entidade = $this->factory->criarEntidade($dadosRequest);
-        }
-        catch (\Exception $e) {
-            return new Response(null, Response::HTTP_PRECONDITION_FAILED);
-        }
+        // } catch (\Exception $e) {
+        //     return new Response(null, Response::HTTP_PRECONDITION_FAILED);
+        // }
 
         // Entity observar esta entidade
         $this->entityManager->persist($entidade);

@@ -7,17 +7,12 @@ use App\Repository\EspecialidadeRepository;
 
 class EspecialidadeFactory implements EntidadeFactory
 {
-    private $especialidadeRepository;
-
-    public function __construct(EspecialidadeRepository $especialidadeRepository)
-    {
-        $this->especialidadeRepository = $especialidadeRepository;
-    }
-
     public function criarEntidade(string $json): Especialidade
     {
         $dadoEmJson = json_decode($json);
-        
+        if(!property_exists($dadoEmJson, 'descricao')) {
+            throw new EntityFactoryException('Especialidade precisa de descricao'); 
+        }       
         $especialidade = new Especialidade();
         $especialidade
             ->setDescricao($dadoEmJson->descricao);
