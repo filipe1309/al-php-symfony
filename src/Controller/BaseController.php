@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Psr\Log\LoggerInterface;
 use App\Helper\ResponseFactory;
 use App\Helper\EntidadeFactory;
 use App\Helper\ExtratorDadosRequest;
@@ -21,19 +22,22 @@ abstract class BaseController extends AbstractController
     protected $factory;
     protected $extratorDadosRequest;
     protected $cache;
+    protected $logger;
 
     public function __construct(
         EntityManagerInterface $entityManager,
         ObjectRepository $repository,
         EntidadeFactory $factory,
         ExtratorDadosRequest $extratorDadosRequest,
-        CacheItemPoolInterface $cache
+        CacheItemPoolInterface $cache,
+        LoggerInterface $logger
     ) {
         $this->entityManager = $entityManager;
         $this->repository = $repository;
         $this->factory = $factory;
         $this->extratorDadosRequest = $extratorDadosRequest;
         $this->cache = $cache;
+        $this->logger = $logger;
     }
     
     public function novo(Request $request): Response
@@ -54,6 +58,11 @@ abstract class BaseController extends AbstractController
         $cacheItem = $this->cache->getItem($this->cachePrefix() . $entidade->getId());
         $cacheItem->set($entidade);
         $this->cache->save($cacheItem);
+
+        $this->logger->notice('Novo registro de {entidade} adicionado com id: {id}', [
+            'entidade' => get_class($entidade),
+            'id' => $entidade->getId(),
+        ]);
 
         return new JsonResponse($entidade, Response::HTTP_CREATED);
     }

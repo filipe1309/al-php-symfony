@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Psr\Log\LoggerInterface;
 use App\Entity\Especialidade;
 use App\Helper\ExtratorDadosRequest;
 use App\Helper\EspecialidadeFactory;
@@ -16,9 +17,10 @@ class EspecialidadesController extends BaseController
         EspecialidadeRepository $repository,
         EspecialidadeFactory $factory,
         ExtratorDadosRequest $extratorDadosRequest,
-        CacheItemPoolInterface $cache
+        CacheItemPoolInterface $cache,
+        LoggerInterface $logger
     ) {
-        parent::__construct($entityManager, $repository, $factory, $extratorDadosRequest, $cache);
+        parent::__construct($entityManager, $repository, $factory, $extratorDadosRequest, $cache, $logger);
     }
 
     /**
