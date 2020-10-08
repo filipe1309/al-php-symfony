@@ -18,16 +18,16 @@ class ExtratorDadosRequest
         unset($informacoesDeFiltro['sort']);
 
         // Pagination
-        $paginalAtual = array_key_exists('page', $informacoesDeFiltro)
+        $page = array_key_exists('page', $informacoesDeFiltro)
             ? $informacoesDeFiltro['page']
             : 1;
         unset($informacoesDeFiltro['page']);
-        $itensPorPagina = array_key_exists('itensPorPagina', $informacoesDeFiltro)
-            ? $informacoesDeFiltro['itensPorPagina']
+        $itemsPerPage = array_key_exists('itemsPerPage', $informacoesDeFiltro)
+            ? $informacoesDeFiltro['itemsPerPage']
             : 5;
-        unset($informacoesDeFiltro['itensPorPagina']);
+        unset($informacoesDeFiltro['itemsPerPage']);
 
-        return [$informacoesDeFiltro, $informacoesDeOrdenacao, $paginalAtual, $itensPorPagina];
+        return [$informacoesDeFiltro, $informacoesDeOrdenacao, $page, $itemsPerPage];
     }
 
     public function buscaDadosOrdenacao(Request $request)
@@ -46,8 +46,8 @@ class ExtratorDadosRequest
 
     public function buscaDadosPaginacao(Request $request)
     {
-        [, , $paginalAtual, $itensPorPagina] = $this->buscaDadosRequest($request);
+        [, , $page, $itemsPerPage] = $this->buscaDadosRequest($request);
 
-        return [$paginalAtual, $itensPorPagina];
+        return [$page, $itemsPerPage];
     }
 }
