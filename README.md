@@ -81,9 +81,9 @@ git tag -a v3.0 -m "Symfony 3"
 
 composer require --dev symfony/phpunit-bridge
 
-bin/phpunit
-
 composer require --dev symfony/browser-kit symfony/css-selector
+
+bin/phpunit
 
 ## Endpoints examples
 
