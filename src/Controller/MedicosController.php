@@ -6,6 +6,7 @@ use App\Entity\Medico;
 use App\Helper\MedicoFactory;
 use App\Helper\ExtratorDadosRequest;
 use App\Repository\MedicoRepository;
+use Psr\Cache\CacheItemPoolInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -17,9 +18,10 @@ class MedicosController extends BaseController
         EntityManagerInterface $entityManager,
         MedicoFactory $factory,
         MedicoRepository $repository,
-        ExtratorDadosRequest $extratorDadosRequest
+        ExtratorDadosRequest $extratorDadosRequest,
+        CacheItemPoolInterface $cache
     ) {
-        parent::__construct($entityManager, $repository, $factory, $extratorDadosRequest);
+        parent::__construct($entityManager, $repository, $factory, $extratorDadosRequest, $cache);
     }
 
     /**
@@ -47,5 +49,10 @@ class MedicosController extends BaseController
         $medicos = $this->repository->findBy(['especialidade' => $especialidadeId]);
         
         return new JsonResponse($medicos);
+    }
+    
+    public function cachePrefix(): string
+    {
+        return 'medico_';
     }
 }

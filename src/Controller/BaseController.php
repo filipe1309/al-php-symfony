@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Helper\ResponseFactory;
 use App\Helper\EntidadeFactory;
 use App\Helper\ExtratorDadosRequest;
+use Psr\Cache\CacheItemPoolInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,17 +20,20 @@ abstract class BaseController extends AbstractController
     protected $repository;
     protected $factory;
     protected $extratorDadosRequest;
+    protected $cache;
 
     public function __construct(
         EntityManagerInterface $entityManager,
         ObjectRepository $repository,
         EntidadeFactory $factory,
-        ExtratorDadosRequest $extratorDadosRequest
+        ExtratorDadosRequest $extratorDadosRequest,
+        CacheItemPoolInterface $cache
     ) {
         $this->entityManager = $entityManager;
         $this->repository = $repository;
         $this->factory = $factory;
         $this->extratorDadosRequest = $extratorDadosRequest;
+        $this->cache = $cache;
     }
     
     public function novo(Request $request): Response
@@ -46,6 +50,10 @@ abstract class BaseController extends AbstractController
 
         // Envia alteracoes para o banco
         $this->entityManager->flush();
+
+        $cacheItem = $this->cache->getItem($this->cachePrefix() . $entidade->getId());
+        $cacheItem->set($entidade);
+        $this->cache->save($cacheItem);
 
         return new JsonResponse($entidade, Response::HTTP_CREATED);
     }
@@ -108,4 +116,5 @@ abstract class BaseController extends AbstractController
     }
 
     abstract public function atualizarEntidadeExistente($entidadeExistente, $entidadeEnviada);
+    abstract public function cachePrefix(): string;
 }
