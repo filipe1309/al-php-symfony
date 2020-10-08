@@ -77,6 +77,8 @@ bin/console make:controller
 
 https://jwt.io/
 
+git tag -a v3.0 -m "Symfony 3"
+
 ## Endpoints examples
 
 ### Login
