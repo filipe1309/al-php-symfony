@@ -107,7 +107,7 @@ HEADER Authorization: Bearer ACESS_TOKEN(JWT)
 GET http://localhost/medicos?sort[crm]=ASC&especialidade=1
 HEADER Authorization: Bearer ACESS_TOKEN(JWT)
 
-GET http://localhost/medicos?page=2&itensPorPagina=3
+GET http://localhost/medicos?page=2&itemsPerPage=3
 HEADER Authorization: Bearer ACESS_TOKEN(JWT)
 
 GET http://localhost/medicos/2
