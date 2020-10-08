@@ -2,6 +2,7 @@
 
 namespace App\Tests;
 
+use App\DataFixtures\UserFixtures;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class EspecialidadesWebTest extends WebTestCase
@@ -44,6 +45,7 @@ class EspecialidadesWebTest extends WebTestCase
 
     private function login($client): string
     {
+        $this->loadUserFixture($client);
         $client->request('POST', '/login', [], [], [
             'CONTENT_TYPE' => 'application/json'
         ], json_encode([
@@ -52,5 +54,14 @@ class EspecialidadesWebTest extends WebTestCase
         ]));
         
         return json_decode($client->getResponse()->getContent())->access_token;
+    }
+
+    private function loadUserFixture($client) {
+        // $container = $client->getContainer();
+        // $doctrine = $container->get('doctrine');
+        // $entityManager = $doctrine->getManager();
+        
+        // $fixture = new UserFixtures();
+        // $fixture->load($entityManager);
     }
 }
