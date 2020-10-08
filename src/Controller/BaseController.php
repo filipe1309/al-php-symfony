@@ -79,7 +79,9 @@ abstract class BaseController extends AbstractController
 
     public function buscarUm(int $id): Response
     {
-        $entidade = $this->repository->find($id);
+        $entidade = $this->cache->hasItem($this->cachePrefix() . $id) 
+            ? $this->cache->getItem($this->cachePrefix() . $id)->get()
+            : $this->repository->find($id);
         $statusResposta = is_null($entidade) ? Response::HTTP_NO_CONTENT : Response::HTTP_OK;
         $fabricaResposta = new ResponseFactory(true, $entidade, $statusResposta);
 
