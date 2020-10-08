@@ -9,6 +9,7 @@ use App\Helper\EspecialidadeFactory;
 use Psr\Cache\CacheItemPoolInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\EspecialidadeRepository;
+use Symfony\Component\Routing\Annotation\Route;
 
 class EspecialidadesController extends BaseController
 {
@@ -35,5 +36,15 @@ class EspecialidadesController extends BaseController
     public function cachePrefix(): string
     {
         return 'especialidade_';
+    }
+
+    /**
+     * @Route("/especialidades_html")
+     */
+    public function especialidadesEmHtml()
+    {
+        return $this->render('especialidades.html.twig', [
+            'especialidades' => $this->repository->findAll()
+        ]);
     }
 }
