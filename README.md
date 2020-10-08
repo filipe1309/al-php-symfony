@@ -93,6 +93,10 @@ bin/console -e test doctrine:schema:create
 
 bin/console -e test doctrine:fixtures:load
 
+bin/phpunit
+
+composer require twig
+
 ## Endpoints examples
 
 ### Login
