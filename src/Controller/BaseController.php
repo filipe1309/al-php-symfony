@@ -94,6 +94,8 @@ abstract class BaseController extends AbstractController
         $this->entityManager->remove($entidade);
         $this->entityManager->flush();
 
+        $this->cache->deleteItem($this->cachePrefix() . $id);
+
         return new Response(null, Response::HTTP_NO_CONTENT);
     }
 
@@ -112,6 +114,10 @@ abstract class BaseController extends AbstractController
 
         // Envia alteracoes para o banco
         $this->entityManager->flush();
+
+        $cacheItem = $this->cache->getItem($this->cachePrefix() . $id);
+        $cacheItem->set($entidadeExistente);
+        $this->cache->save($cacheItem);
 
         $fabricaResposta = new ResponseFactory(true, $entidadeExistente, Response::HTTP_OK);
         return $fabricaResposta->getResponse();
