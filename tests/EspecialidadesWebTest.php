@@ -64,4 +64,13 @@ class EspecialidadesWebTest extends WebTestCase
         // $fixture = new UserFixtures();
         // $fixture->load($entityManager);
     }
+
+    public function testHtmlEspecialidades()
+    {
+        $client = static::createClient();
+        $client->request('GET', '/especialidades_html');
+
+        self::assertSelectorTextContains('h1', 'Especialidades');
+        self::assertSelectorExists('.especialidade');
+    }
 }
