@@ -75,6 +75,8 @@ bin/console doctrine:fixtures:load
 
 bin/console make:controller
 
+https://jwt.io/
+
 ## Endpoints examples
 
 ### Login
