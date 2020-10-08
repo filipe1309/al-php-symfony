@@ -79,11 +79,19 @@ https://jwt.io/
 
 git tag -a v3.0 -m "Symfony 3"
 
+### Tests
+
 composer require --dev symfony/phpunit-bridge
 
 composer require --dev symfony/browser-kit symfony/css-selector
 
 bin/phpunit
+
+bin/console -e test doctrine:database:create
+
+bin/console -e test doctrine:schema:create
+
+bin/console -e test doctrine:fixtures:load
 
 ## Endpoints examples
 
