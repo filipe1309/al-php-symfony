@@ -55,17 +55,17 @@ abstract class BaseController extends AbstractController
     {
         $informacoesDeOrdenacao = $this->extratorDadosRequest->buscaDadosOrdenacao($request);
         $informacoesDeFiltro = $this->extratorDadosRequest->buscaDadosFiltro($request);
-        [$paginalAtual, $itensPorPagina] = $this->extratorDadosRequest->buscaDadosPaginacao($request);
+        [$page, $itemsPerPage] = $this->extratorDadosRequest->buscaDadosPaginacao($request);
 
         $entityList = $this->repository->findBy(
             $informacoesDeFiltro,
             $informacoesDeOrdenacao,
-            $itensPorPagina,
-            ($paginalAtual - 1)*$itensPorPagina
+            $itemsPerPage,
+            ($page - 1)*$itemsPerPage
         );
 
         $statusResposta = is_null($entityList) ? Response::HTTP_NO_CONTENT : Response::HTTP_OK;
-        $fabricaResposta = new ResponseFactory(true, $entityList, $statusResposta, $paginalAtual, $itensPorPagina);
+        $fabricaResposta = new ResponseFactory(true, $entityList, $statusResposta, $page, $itemsPerPage);
 
         return $fabricaResposta->getResponse();
     }

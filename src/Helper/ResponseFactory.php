@@ -10,37 +10,37 @@ class ResponseFactory
     private $sucesso;
     private $conteudoResposta;
     private $statusResposta;
-    private $paginalAtual;
-    private $itensPorPagina;
+    private $page;
+    private $itemsPerPage;
 
     public function __construct(
         bool $sucesso,
         $conteudoResposta,
         int $statusResposta = Response::HTTP_OK,
-        int $paginalAtual = null,
-        int $itensPorPagina = null
+        int $page = null,
+        int $itemsPerPage = null
     ) {
         $this->sucesso = $sucesso;
         $this->conteudoResposta = $conteudoResposta;
         $this->statusResposta = $statusResposta;
-        $this->paginalAtual = $paginalAtual;
-        $this->itensPorPagina = $itensPorPagina;
+        $this->page = $page;
+        $this->itemsPerPage = $itemsPerPage;
     }
 
     public function getResponse(): JsonResponse
     {
         $conteudoResposta = [
             'sucesso' => $this->sucesso,
-            'paginalAtual' => $this->paginalAtual,
-            'itensPorPagina' => $this->itensPorPagina,
+            'page' => $this->page,
+            'itemsPerPage' => $this->itemsPerPage,
             'conteudoResposta' => $this->conteudoResposta,
             // TODO Add total de resultados
             // TODO Add URL da proxima pagina e anterior
         ];
 
-        if (is_null($this->paginalAtual)) {
-            unset($conteudoResposta['paginalAtual']);
-            unset($conteudoResposta['itensPorPagina']);
+        if (is_null($this->page)) {
+            unset($conteudoResposta['page']);
+            unset($conteudoResposta['itemsPerPage']);
         }
 
         return new JsonResponse($conteudoResposta, $this->statusResposta);
