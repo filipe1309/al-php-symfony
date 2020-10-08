@@ -1,6 +1,7 @@
 version: "3.8"
 services:
     php:
+        container_name: phpcontainer
         build: .
         ports:
             - "80:80"
